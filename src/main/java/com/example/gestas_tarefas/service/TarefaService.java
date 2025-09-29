@@ -1,6 +1,7 @@
 package com.example.gestas_tarefas.service;
 
 
+import com.example.gestas_tarefas.exceptions.RecursoNaoEncontradoException;
 import com.example.gestas_tarefas.model.Tarefa;
 import com.example.gestas_tarefas.repository.TarefaRepository;
 import org.springframework.stereotype.Service;
@@ -18,18 +19,24 @@ public class TarefaService {
     }
 
     public List<Tarefa> findAll(){
+
         return tarefaRepository.findAll();
     }
 
-    public Optional<Tarefa> findById(Long id){
-        return tarefaRepository.findById(id);
+    public Tarefa findById(Long id){
+
+        return tarefaRepository.findById(id).orElseThrow(() -> new RecursoNaoEncontradoException("Produto com ID "+id+" não encontrado" ));
     }
 
     public Tarefa salvarTarefa(Tarefa tarefa){
+
         return tarefaRepository.save(tarefa);
     }
 
     public void deletarTarefa(Long id){
+        if (!tarefaRepository.existsById(id)) {
+            throw new RecursoNaoEncontradoException("Produto com ID \"+id+\" não encontrado");
+        }
         tarefaRepository.deleteById(id);
     }
 

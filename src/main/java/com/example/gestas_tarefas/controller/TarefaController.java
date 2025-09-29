@@ -1,7 +1,9 @@
 package com.example.gestas_tarefas.controller;
 
+import com.example.gestas_tarefas.exceptions.RecursoNaoEncontradoException;
 import com.example.gestas_tarefas.model.Tarefa;
 import com.example.gestas_tarefas.service.TarefaService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,23 +16,25 @@ public class TarefaController {
     private final TarefaService tarefaService;
 
     public TarefaController(TarefaService tarefaService) {
+
         this.tarefaService = tarefaService;
     }
 
     @GetMapping
     public List<Tarefa> listarTarefa() {
+
         return tarefaService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Tarefa> buscarTarefa(@PathVariable Long id) {
-        return tarefaService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<?> buscarTarefa(@PathVariable Long id) {
+            Tarefa tarefa = tarefaService.findById(id);
+            return ResponseEntity.ok(tarefa);
     }
 
     @PostMapping
     public Tarefa criarTarefa(@RequestBody Tarefa tarefa) {
+
         return tarefaService.salvarTarefa(tarefa);
     }
 
