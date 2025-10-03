@@ -46,6 +46,6 @@ public class TarefaService {
             tarefa.setDescricao(tarefaAtualizada.getDescricao());
             tarefa.setStatusTarefa(tarefaAtualizada.getStatusTarefa());
             return tarefaRepository.save(tarefa);
-        }).orElse(null);
+        }).orElseThrow(() -> new RecursoNaoEncontradoException("Tarefa com ID " + id + " não encontrada"));
     }
 }
