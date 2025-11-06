@@ -1,9 +1,7 @@
 package com.example.gestas_tarefas.controller;
 
-import com.example.gestas_tarefas.exceptions.RecursoNaoEncontradoException;
 import com.example.gestas_tarefas.model.Tarefa;
 import com.example.gestas_tarefas.service.TarefaService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +18,7 @@ public class TarefaController {
         this.tarefaService = tarefaService;
     }
 
-    @GetMapping
+    @GetMapping("/")
     public List<Tarefa> listarTarefa() {
 
         return tarefaService.findAll();

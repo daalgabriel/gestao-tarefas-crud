@@ -34,7 +34,7 @@ public class TarefaService {
 
     public void deletarTarefa(Long id){
         if (!tarefaRepository.existsById(id)) {
-            throw new RecursoNaoEncontradoException("Produto com ID \"+id+\" não encontrado");
+            throw new RecursoNaoEncontradoException("Produto com ID "+id+" não encontrado");
         }
         tarefaRepository.deleteById(id);
     }

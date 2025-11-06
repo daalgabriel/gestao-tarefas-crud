@@ -53,7 +53,7 @@ class TarefaServiceTest {
 
     @Test
     @DisplayName("Atualizar a tarefa Com Sucesso")
-    void criarTarefaAtualizada() {
+    void atualizarTarefa() {
 
         Long id = 1L;
         final var tarefaSalvaExistente = TarefaServiceFixture.criarTarefa();
@@ -76,9 +76,9 @@ class TarefaServiceTest {
 
     @Test
     @DisplayName("Buscar tarefa por ID com Sucesso")
-    void buscarTarefaPorId(){
+    void buscarTarefaPorIdComSucesso() {
         Long id = 1L;
-        var tarefaExistente = TarefaServiceFixture.criarTarefa();
+        final var tarefaExistente = TarefaServiceFixture.criarTarefa();
         when (tarefaRepository.findById(id)).thenReturn(Optional.of(tarefaExistente));
 
         Tarefa tarefa = tarefaService.findById(id);
@@ -87,6 +87,18 @@ class TarefaServiceTest {
         assertEquals(tarefaExistente.getId(), tarefa.getId());
         assertEquals(tarefaExistente.getTitulo(), tarefa.getTitulo());
 
+        verify(tarefaRepository, times(1)).findById(id);
+    }
+
+    @Test
+    @DisplayName("Buscar tarefa com ID Sem Sucesso")
+    void buscarTarefaPorIdSemSucesso(){
+        Long id = 1L;
+        when (tarefaRepository.findById(id)).thenReturn(Optional.empty());
+
+        var excecao = assertThrows(RecursoNaoEncontradoException.class, () -> tarefaService.findById(id));
+
+        assertEquals("Produto com ID " + id +" não encontrado", excecao.getMessage());
         verify(tarefaRepository, times(1)).findById(id);
     }
 
@@ -111,7 +123,7 @@ class TarefaServiceTest {
         var excecao = assertThrows(RecursoNaoEncontradoException.class,
                 () -> tarefaService.deletarTarefa(id));
 
-        assertEquals("Produto com ID \"+id+\" não encontrado", excecao.getMessage());
+        assertEquals("Produto com ID "+id+" não encontrado", excecao.getMessage());
         verify(tarefaRepository, times(1)).existsById(id);
         verify(tarefaRepository, times (0)).deleteById(id);
     }
